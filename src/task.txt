@@ -1,0 +1,10 @@
+# Each line: description|difficulty|completed|month|day|time AM/PM
+# difficulty: easy, medium, or hard   completed: yes or no
+Finish essay|hard|no|11|20|9:00 AM
+Do laundry|easy|yes|11|12|6:30 PM
+Lab write-up|medium|no|11|12|8:15 AM
+Read chapter 5|easy|no|12|1|7:00 AM
+Study for quiz|medium|no|11|14|12:00 PM
+Call grandma|easy|yes|11|30|12:00 AM
+Build science project|hard|no|12|5|3:45 PM
+Practice piano|easy|no|11|12|6:30 PM
