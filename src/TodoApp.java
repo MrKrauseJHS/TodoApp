@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.function.Function;
 
 /**
  * Console to-do list tracker that loads its tasks from a text file.
@@ -32,9 +31,9 @@ public class TodoApp {
             String choice = in.nextLine().trim();
             switch (choice) {
                 case "1": show(tasks); break;
-                case "2": sortAndShow(tasks, Task::getDifficulty); break;
-                case "3": sortAndShow(tasks, Task::getCompleted); break;
-                case "4": sortAndShow(tasks, Task::getDueTime); break;
+                case "2": sortAndShow(tasks, "difficulty"); break;
+                case "3": sortAndShow(tasks, "completed"); break;
+                case "4": sortAndShow(tasks, "dueTime"); break;
                 case "5": return;
                 default: System.out.println("Please enter 1-5.");
             }
@@ -90,12 +89,13 @@ public class TodoApp {
         return new Task(description, difficulty, completed, due);
     }
 
-    private static <K extends Comparable<K>> void sortAndShow(ArrayList<Task> tasks, Function<Task, K> key) {
+    /** field is "difficulty", "completed", or "dueTime". */
+    private static void sortAndShow(ArrayList<Task> tasks, String field) {
         Task[] arr = tasks.toArray(new Task[0]);
-        Sorts.bubbleSortBy(arr, key);
-        System.out.println("Sorted:");
+        Sorts.bubbleSort(arr, field);
+        System.out.println("Sorted by " + field + ":");
         for (Task t : arr) System.out.println("  " + t);
-        System.out.println("isSorted check: " + Sorts.isSortedBy(arr, key));
+        System.out.println("isSorted check: " + Sorts.isSorted(arr, field));
     }
 
     private static void show(ArrayList<Task> tasks) {
