@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.function.Function;
 
 /**
  * Swing GUI starter for the to-do list tracker.
@@ -101,15 +100,15 @@ public class TodoGui extends JFrame {
         buttons.add(new JLabel("   Sort by:"));
 
         JButton byDifficulty = new JButton("Difficulty");
-        byDifficulty.addActionListener(e -> sortBy(Task::getDifficulty, "difficulty"));
+        byDifficulty.addActionListener(e -> sortBy("difficulty"));
         buttons.add(byDifficulty);
 
         JButton byCompleted = new JButton("Completed");
-        byCompleted.addActionListener(e -> sortBy(Task::getCompleted, "completed"));
+        byCompleted.addActionListener(e -> sortBy("completed"));
         buttons.add(byCompleted);
 
         JButton byDueTime = new JButton("Due Time");
-        byDueTime.addActionListener(e -> sortBy(Task::getDueTime, "due time"));
+        byDueTime.addActionListener(e -> sortBy("dueTime"));
         buttons.add(byDueTime);
 
         bottom.add(buttons, BorderLayout.CENTER);
@@ -181,47 +180,51 @@ public class TodoGui extends JFrame {
 
     // ---------- TODO: students finish these ----------
 
-    /**
-     * TODO 1: Read the form fields and add a new Task to the tasks list.
-     *   - description: descriptionField.getText()  (show an error if it is empty)
-     *   - difficulty:  new Difficulty((String) difficultyBox.getSelectedItem())
-     *   - completed:   new Completed(completedBox.isSelected())
-     *   - due time:    new DueTime(month, day, hour, minute, amPm)
-     *                  (get each number with (int) monthSpinner.getValue(), etc.,
-     *                   and the AM/PM text with (String) amPmBox.getSelectedItem())
-     * Then clear the description field and call refreshTable().
-     * Hint: DueTime throws IllegalArgumentException for bad values. Catch it and
-     *       show the message with showError(...).
-     */
     private void addTask() {
-        // TODO
-        showError("addTask is not finished yet");
+        String description = descriptionField.getText().trim();
+        if (description.isEmpty()) {
+            showError("Please enter a description.");
+            return;
+        }
+        try {
+            Difficulty difficulty = new Difficulty((String) difficultyBox.getSelectedItem());
+            Completed completed = new Completed(completedBox.isSelected());
+            DueTime due = new DueTime(
+                    (int) monthSpinner.getValue(),
+                    (int) daySpinner.getValue(),
+                    (int) hourSpinner.getValue(),
+                    (int) minuteSpinner.getValue(),
+                    (String) amPmBox.getSelectedItem());
+            tasks.add(new Task(description, difficulty, completed, due));
+            descriptionField.setText("");
+            refreshTable();
+            showStatus("Added \"" + description + "\"");
+        } catch (IllegalArgumentException e) {
+            showError(e.getMessage());
+        }
     }
 
     /**
-     * TODO 2: Sort the tasks by the given property, then show the result.
-     *   - Copy the list into an array: Task[] arr = tasks.toArray(new Task[0]);
-     *   - Sort it: Sorts.bubbleSortBy(arr, key);
+     * TODO 1: Sort the tasks by the given field, then show the result.
+     * field is "difficulty", "completed", or "dueTime".
+     *   - Sort it: Sorts.bubbleSort(arr, field);
      *   - Put the sorted tasks back into the list (clear it, then add each one).
      *   - Call refreshTable().
-     *   - Set the status label to say whether Sorts.isSortedBy(arr, key) is true,
+     *   - Set the status label to say whether Sorts.isSorted(arr, field) is true,
      *     for example: "Sorted by difficulty: verified".
      */
-    private <K extends Comparable<K>> void sortBy(Function<Task, K> key, String propertyName) {
+    private void sortBy(String field) {
         // TODO
+        Task[] arr = tasks.toArray(new Task[0]);
         showError("sortBy is not finished yet");
     }
 
-    /**
-     * TODO 3: Rebuild the table from the tasks list.
-     *   - tableModel.setRowCount(0) clears the table.
-     *   - For each task, call tableModel.addRow(new Object[]{ ... }) with the
-     *     description, difficulty, completed, and due time (toString() is fine,
-     *     the due time already prints with AM/PM).
-     * Do this one first: the loaded tasks will appear as soon as it works.
-     */
     private void refreshTable() {
-        // TODO
+        tableModel.setRowCount(0);
+        for (Task t : tasks) {
+            tableModel.addRow(new Object[]{
+                    t.getDescription(), t.getDifficulty(), t.getCompleted(), t.getDueTime()});
+        }
     }
 
     // ---------- Provided helpers ----------
