@@ -208,7 +208,7 @@ public class TodoGui extends JFrame {
      * TODO 1: Sort the tasks by the given field, then show the result.
      * field is "difficulty", "completed", or "dueTime".
      *   - Sort it: Sorts.bubbleSort(arr, field);
-     *   - Put the sorted tasks back into the list (clear it, then add each one).
+     *   - Put the sorted tasks back into the list (clear it, then add each one)  .
      *   - Call refreshTable().
      *   - Set the status label to say whether Sorts.isSorted(arr, field) is true,
      *     for example: "Sorted by difficulty: verified".
